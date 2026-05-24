@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>AniToon</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <a href="index.html" class="logo">AniToon</a>
+    <form class="search-bar" action="index.html" method="get">
+        <input type="text" name="q" class="search-input" placeholder="Search anime..." aria-label="Search anime">
+        <button type="submit" class="search-button">Search</button>
+    </form>
+</div>
+
+<div class="container">
+
+<h1 style="margin-bottom:20px;color:#00ff88;">Popular Anime</h1>
+
+<div class="anime-grid">
+
+<a href="naruto.html">
+<div class="card">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwFVQNdm13POPyzMWlwftFV0JJWGg4dfNrg&s">
+<div class="card-info">
+<h3>Naruto</h3>
+</div>
+</div>      
+</a>
+
+<a href="onepiece.html">
+<div class="card">
+<img src="https://wallpapercave.com/wp/wp9100136.jpg">
+<div class="card-info">
+<h3>One Piece</h3>
+</div>
+</div>
+</a>
+<a href="tomandjerry.html">
+<div class="card">
+<img src="https://m.media-amazon.com/images/M/MV5BNTQ2MTU3MTAtMDNhMS00YmY0LWFlMDYtNGE2ZTZjZTJkMmU5XkEyXkFqcGc@._V1_.jpg">
+<div class="card-info">
+<h3>Tom and Jerry</h3>
+</div>
+</div>
+</a>
+
+</div>
+
+<p id="search-empty" class="empty-state" hidden>No anime found for that search.</p>
+
+</div>
+
+<script>
+const searchInput = document.querySelector('.search-input');
+const searchForm = document.querySelector('.search-bar');
+const animeLinks = Array.from(document.querySelectorAll('.anime-grid a'));
+const emptyState = document.getElementById('search-empty');
+
+const params = new URLSearchParams(window.location.search);
+const query = (params.get('q') || '').trim().toLowerCase();
+
+if (searchInput) {
+    searchInput.value = query;
+}
+
+function filterAnimeCards() {
+    const activeQuery = (searchInput?.value || '').trim().toLowerCase();
+    let visibleCount = 0;
+
+    animeLinks.forEach(link => {
+        const text = link.textContent.toLowerCase();
+        const isMatch = !activeQuery || text.includes(activeQuery);
+        link.hidden = !isMatch;
+
+        if (isMatch) {
+            visibleCount += 1;
+        }
+    });
+
+    if (emptyState) {
+        emptyState.hidden = visibleCount !== 0;
+    }
+}
+
+if (searchForm) {
+    searchForm.addEventListener('submit', (event) => {
+        const value = (searchInput?.value || '').trim();
+        const nextUrl = value ? `index.html?q=${encodeURIComponent(value)}` : 'index.html';
+        window.location.href = nextUrl;
+        event.preventDefault();
+    });
+}
+
+filterAnimeCards();
+</script>
+
+</body>
+</html>

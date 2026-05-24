@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>One Piece</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <a href="index.html" class="logo">AniToon</a>
+    <form class="search-bar" action="index.html" method="get">
+        <input type="text" name="q" class="search-input" placeholder="Search anime..." aria-label="Search anime">
+        <button type="submit" class="search-button">Search</button>
+    </form>
+</div>
+
+<div class="container">
+
+<a class="back" href="index.html">
+<button>← Back</button>
+</a>
+
+<div class="banner">
+<img src="https://wallpapercave.com/wp/wp9100136.jpg">
+
+<div>
+<h1>One Piece</h1>
+
+<div class="selectors">
+<select id="season"></select>
+<select id="episode"></select>
+<select id="language"></select>
+</div>
+
+</div>
+</div>
+
+<iframe id="player" src=""></iframe>
+
+</div>
+
+<script>
+
+const data = 
+{
+title:"One Piece",
+
+seasons:{
+
+"Season 1":{
+
+episodes:{
+
+"Episode 1":{
+English:"https://streamtape.com/e/J3kOKblx4MTogm",
+Japanese:"https://streamtape.com/e/0VWovKw31QIg2a/",
+Hindi:"https://streamtape.com/e/J3kOKblx4MTogm",
+Tamil:"https://streamtape.com/e/0VWovKw31QIg2a/",
+Telugu:"https://streamtape.com/e/J3kOKblx4MTogm",
+Malayalam:"https://streamtape.com/e/0VWovKw31QIg2a/",
+Bengali:"https://streamtape.com/e/J3kOKblx4MTogm"
+}
+
+}
+
+}
+
+}
+
+}
+;
+
+const season = document.getElementById("season");
+const episode = document.getElementById("episode");
+const language = document.getElementById("language");
+const player = document.getElementById("player");
+
+function loadSeasons(){
+    season.innerHTML = "";
+
+    Object.keys(data.seasons).forEach(s=>{
+        season.innerHTML += `<option value="${s}">${s}</option>`;
+    });
+
+    loadEpisodes();
+}
+
+function loadEpisodes(){
+    const eps = data.seasons[season.value].episodes;
+
+    episode.innerHTML = "";
+
+    Object.keys(eps).forEach(ep=>{
+        episode.innerHTML += `<option value="${ep}">${ep}</option>`;
+    });
+
+    loadLanguages();
+}
+
+function loadLanguages(){
+    const langs = data.seasons[season.value]
+    .episodes[episode.value];
+
+    language.innerHTML = "";
+
+    Object.keys(langs).forEach(lang=>{
+        language.innerHTML += `<option value="${lang}">${lang}</option>`;
+    });
+
+    updateVideo();
+}
+
+function updateVideo(){
+    player.src = data.seasons[season.value]
+    .episodes[episode.value][language.value];
+}
+
+season.addEventListener("change", loadEpisodes);
+episode.addEventListener("change", loadLanguages);
+language.addEventListener("change", updateVideo);
+
+loadSeasons();
+
+</script>
+
+</body>
+</html>

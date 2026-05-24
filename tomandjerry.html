@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tom and Jerry</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <a href="index.html" class="logo">AniToon</a>
+    <form class="search-bar" action="index.html" method="get">
+        <input type="text" name="q" class="search-input" placeholder="Search anime..." aria-label="Search anime">
+        <button type="submit" class="search-button">Search</button>
+    </form>
+</div>
+
+<div class="container">
+
+<a class="back" href="index.html">
+<button>← Back</button>
+</a>
+
+<div class="banner">
+<img src="https://m.media-amazon.com/images/M/MV5BNTQ2MTU3MTAtMDNhMS00YmY0LWFlMDYtNGE2ZTZjZTJkMmU5XkEyXkFqcGc@._V1_.jpg">
+
+<div>
+<h1>Tom and Jerry</h1>
+
+<div class="selectors">
+<select id="season"></select>
+<select id="episode"></select>
+<select id="language"></select>
+</div>
+
+</div>
+</div>
+
+<iframe id="player" src=""></iframe>
+
+</div>
+
+<script>
+
+const episodeUrl = "https://streamtape.com/e/J3kOKblx4MTogm";
+
+const episodes = {};
+for (let i = 1; i <= 114; i++) {
+    episodes[`Episode ${i}`] = {
+        English: episodeUrl
+    };
+}
+
+const data = {
+    title: "Tom and Jerry",
+    seasons: {
+        "Season 1": {
+            episodes
+        }
+    }
+};
+
+const season = document.getElementById("season");
+const episode = document.getElementById("episode");
+const language = document.getElementById("language");
+const player = document.getElementById("player");
+
+function loadSeasons(){
+    season.innerHTML = "";
+
+    Object.keys(data.seasons).forEach(s=>{
+        season.innerHTML += `<option value="${s}">${s}</option>`;
+    });
+
+    loadEpisodes();
+}
+
+function loadEpisodes(){
+    const eps = data.seasons[season.value].episodes;
+
+    episode.innerHTML = "";
+
+    Object.keys(eps).forEach(ep=>{
+        episode.innerHTML += `<option value="${ep}">${ep}</option>`;
+    });
+
+    loadLanguages();
+}
+
+function loadLanguages(){
+    const langs = data.seasons[season.value]
+    .episodes[episode.value];
+
+    language.innerHTML = "";
+
+    Object.keys(langs).forEach(lang=>{
+        language.innerHTML += `<option value="${lang}">${lang}</option>`;
+    });
+
+    updateVideo();
+}
+
+function updateVideo(){
+    player.src = data.seasons[season.value]
+    .episodes[episode.value][language.value];
+}
+
+season.addEventListener("change", loadEpisodes);
+episode.addEventListener("change", loadLanguages);
+language.addEventListener("change", updateVideo);
+
+loadSeasons();
+
+</script>
+
+</body>
+</html>
